@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@import "uniwind";
+
+/* Palette read from the shipped bulldogging.pro stylesheet, so the app
+   matches the site a user just came from. */
+@theme {
+  --color-background: #0e1319;
+  --color-surface: #161d26;
+  --color-card: #1c2531;
+  --color-border: #2e3b4a;
+  --color-text: #d3dbe6;
+  --color-muted: #93a1b3;
+  --color-accent: #d9a441;
+  --color-accentAlt: #6f9fd8;
+  --color-cream: #eef2f7;
+  --color-success: #4ba36b;
+  --color-warning: #d99a2b;
+  --color-danger: #c8503f;
+}
