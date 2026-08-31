@@ -30,6 +30,23 @@ test('a legal fall scores the raw time', () => {
   assert.equal(outcome.officialTimeMs, 4100);
 });
 
+test('a profile that does not state its hazer rule is refused, not guessed', () => {
+  // The old default was `true`, so a profile that had never heard of the key
+  // turned a clean run into a no time. Nothing in docs/RULES.md settles what
+  // hazer interference costs, so the profile has to say.
+  const silent: RulesProfile = { ...PRCA, values: { ...PRCA.values } };
+  delete silent.values.hazer_interference_no_times;
+
+  assert.throws(
+    () => scoreSteerWrestlingRun(run({ hazerInterference: true, rulesProfile: silent })),
+    /missing required rule "hazer_interference_no_times"/,
+  );
+
+  // A run with no interference never reads the key, so an incomplete profile
+  // still scores every ordinary run.
+  assert.equal(scoreSteerWrestlingRun(run({ rulesProfile: silent })).status, 'clean');
+});
+
 test('you cannot compete without a hazer', () => {
   const outcome = scoreSteerWrestlingRun(run({ hazerId: null }));
   assert.equal(outcome.status, 'no_time');

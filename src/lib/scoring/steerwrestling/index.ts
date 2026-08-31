@@ -12,8 +12,8 @@ import {
   type RulesProfile,
   type RunOutcome,
   formatTime,
-  profileBool,
   profileNumber,
+  requireBool,
   requireNumber,
 } from '../types.ts';
 
@@ -62,8 +62,13 @@ export function scoreSteerWrestlingRun(input: SteerWrestlingRunInput): RunOutcom
   }
 
   // Hazer interference is association-dependent, so it is gated rather than
-  // always fatal.
-  if (input.hazerInterference && profileBool(p, 'hazer_interference_no_times', true)) {
+  // always fatal — and `requireBool` rather than a default, because the
+  // default was `true`: a profile that had never heard of the key turned a
+  // clean run into a no time. No published source in docs/RULES.md settles
+  // what a hazer's interference costs, so a profile has to say, and one that
+  // does not is refused instead of guessed at. Same defect as the tie-down
+  // jerk-down rule.
+  if (input.hazerInterference && requireBool(p, 'hazer_interference_no_times')) {
     return fail('no_time', 'HAZER_INTERFERENCE', SW_PENALTIES.HAZER_INTERFERENCE.rule, cite, penalties);
   }
 
